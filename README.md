@@ -1,35 +1,135 @@
 # ai-company-template
 
-ローカルフォルダで動く「AI 仮想会社」を構築するための**親テンプレート**です。
-GitHub Template repository 機能から複製して、事業ごとの**子会社**リポジトリを作る運用を想定しています。
+ローカルフォルダで動く「AI 仮想会社」を構築するための**親テンプレート**。
+GitHub Template repository 機能から複製し、事業ごとの**子会社**リポジトリを作る運用を想定しています。
 
-> **Status:** 構築中（Phase 1 / 全7フェーズ）。詳細な使い方ガイドは Phase 6 で記述します。
+> このREADMEは「自分（社長）が子会社を作るときに読み返すセルフガイド」として書かれています。
 
-## このテンプレートの位置づけ
+## 全体像
 
-- このリポジトリには「**どの事業でも共通して使える型**」だけが入っています。
-- 事業固有の内容（会社名・商品名・ミッション等）はすべて `{{ 事業名 }}` のような**プレースホルダー**になっており、子会社化時に穴埋めします。
+| 役割 | 担当 |
+|------|------|
+| 社長（あなた） | 意思決定・最終承認 |
+| 秘書（カズヨ） | 唯一の窓口・司令塔 |
+| 経理（ハジメ）／法務（ハルオ）／庶務（マリエ）／コンテンツ制作（ヒデアキ） | 専門サブエージェント |
 
-## 構成（Phase 1 時点の骨格）
+社長が話すのは秘書だけ。秘書が4専門に振り、進捗を統合して報告します。
+
+詳細な設計思想は [docs/reference/動画分析.md](docs/reference/動画分析.md) 参照。
+
+---
+
+## 子会社を作る手順（5ステップ）
+
+### Step 1: テンプレートから複製
+
+GitHub のリポジトリページで **"Use this template" → "Create a new repository"** をクリック。
+事業名でリポジトリ名をつける（例：`amazon-merchandise`）。
+
+```bash
+git clone git@github.com:<your-account>/<new-repo>.git
+cd <new-repo>
+```
+
+### Step 2: プレースホルダーを埋める
+
+[CLAUDE.md §7](CLAUDE.md) のチェックリストを上から順に埋めます。
+
+```bash
+# 埋め残しを検出
+grep -rn "{{ " . --include="*.md" --exclude-dir=docs/reference
+```
+
+最低限埋めるもの：
+
+- `{{ 事業名 }}` — 例：Amazon物販事業
+- `{{ ミッション }}` — その事業の存在意義
+- `{{ 最重要KPI }}` — 例：月商800万円
+- `{{ 主力商品/サービス }}` — 何を扱うか
+- `{{ 想定顧客 }}` — 誰のため
+
+エージェント名（カズヨ・ハジメ・ハルオ・マリエ・ヒデアキ）を事業に合わせて変えたい場合は、各 `agents/<role>/agent.md` を編集。
+
+### Step 3: Notion カンバンをセットアップ
+
+→ [docs/notion-setup-guide.md](docs/notion-setup-guide.md) の手順に従う。
+
+ざっくり：Notion で DB を1つ作り、トークンを取得し、`.mcp.json.example` を `.mcp.json` にコピーして埋める。
+
+### Step 4: 他の MCP を追加（必要なら）
+
+Gmail・Slack・GitHub などの道具を秘書/サブエージェントに持たせたい場合は、`.mcp.json` にサーバを追加。
+→ [docs/mcp-setup-guide.md](docs/mcp-setup-guide.md) 参照。
+
+### Step 5: 初回起動と動作確認
+
+Claude Code でこのリポジトリを開いて：
+
+1. セッション開始時に `CLAUDE.md` が読み込まれることを確認
+2. 秘書に「テスト用チケットを1件起票して Notion にも反映して」と依頼
+3. `workspace/tickets/todo/` にファイルが作られ、Notion カードも作られることを確認
+
+ここまで動けば運用開始可能です。
+
+---
+
+## 日々の使い方
+
+### 1. 社長は秘書（カズヨ）にだけ話す
+
+経理・法務・庶務・コンテンツ制作に直接話しかけないでください。秘書経由で振ります（その方が全体最適化されます）。
+
+### 2. 進捗は2箇所で見える
+
+| 見る場所 | 用途 |
+|---------|------|
+| Notion カンバン | スマホ・出先からの確認に最適 |
+| [workspace/tickets/](workspace/tickets/) | リポジトリ内での詳細確認・履歴 |
+
+### 3. 確認するのは最終納品物だけ
+
+[workspace/output/final_output/](workspace/output/final_output/) に置かれたものを見ます。途中経過（`agent_output/`）は問題発生時の監査用。
+
+### 4. 承認が必要な依頼は `waiting/` に来る
+
+外部発信・課金・契約・削除など [CLAUDE.md §4.1](CLAUDE.md) のリスク項目は、必ず `tickets/waiting/` に出されます。チェックして「承認」または「差し戻し」を秘書に伝えれば、その通り動きます。
+
+### 5. 育てる場所は memory/
+
+各エージェントの `agents/<role>/memory/` に、好み・判断理由・失敗が蓄積されます。3ヶ月運用すれば、あなたの分身のように先回りできるようになります。
+
+---
+
+## フォルダ構成（要点）
 
 ```
 .
-├── CLAUDE.md                 # 会社全体のルール（Phase 2 で本格化）
-├── agents/                   # 各エージェント
-│   ├── secretary/            # 秘書（メイン窓口）
-│   ├── accounting/           # 経理
-│   ├── legal/                # 法務
-│   ├── general_affairs/      # 庶務
-│   └── content_creator/      # コンテンツ制作
+├── CLAUDE.md                          # 会社の憲法（自動読込）
+├── README.md                          # このファイル
+├── .mcp.json.example                  # Notion MCP スタブ（コピーして使う）
+├── agents/
+│   ├── secretary/         (カズヨ)    # 唯一の窓口
+│   ├── accounting/        (ハジメ)    # 経理
+│   ├── legal/             (ハルオ)    # 法務
+│   ├── general_affairs/   (マリエ)    # 庶務
+│   └── content_creator/   (ヒデアキ)  # コンテンツ制作
 ├── workspace/
-│   ├── tickets/{todo,doing,waiting,done}/   # タスク管理（Git 管理）
-│   └── output/{agent_output,final_output}/  # 成果物（.gitignore）
+│   ├── tickets/{todo,doing,waiting,done}/   # カンバン（Notion同期）
+│   ├── output/{agent_output,final_output}/  # 成果物
+│   ├── README.md                            # workspace 運用ハブ
+│   └── SUBAGENT_PROTOCOL.md                 # サブ共通プロトコル
 └── docs/
-    └── reference/動画分析.md  # 設計の出典
+    ├── reference/動画分析.md          # 設計の出典
+    ├── notion-board-schema.md         # Notion DB 仕様
+    ├── notion-setup-guide.md          # Notion セットアップ手順
+    └── mcp-setup-guide.md             # 任意MCP追加ガイド
 ```
 
-各エージェントフォルダは `agent.md` / `memory/` / `skills/` の3点セットを持ちます。
+---
 
 ## 参考
 
 - 設計の出典: [docs/reference/動画分析.md](docs/reference/動画分析.md)
+- 会社の憲法: [CLAUDE.md](CLAUDE.md)
+- workspace 運用詳細: [workspace/README.md](workspace/README.md)
+- 秘書のスキル: [agents/secretary/skills/](agents/secretary/skills/)
