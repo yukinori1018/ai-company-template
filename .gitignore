@@ -1,5 +1,8 @@
 .DS_Store
 
+# MCP の実体設定（API キー等の秘匿情報を含むため除外。.mcp.json.example はコミット）
+.mcp.json
+
 # 成果物は Git 管理しない（チケットは管理する）
 workspace/output/**
 !workspace/output/

@@ -1,0 +1,13 @@
+{
+  "_comment": "Notion MCP のスタブ設定。子会社化時に .mcp.json にコピーして {{ }} を埋めてください。実体の .mcp.json は .gitignore 対象です。",
+  "mcpServers": {
+    "notion": {
+      "command": "npx",
+      "args": ["-y", "@notionhq/notion-mcp-server"],
+      "env": {
+        "NOTION_API_KEY": "{{ NOTION_API_KEY }}",
+        "NOTION_DATABASE_ID": "{{ NOTION_DATABASE_ID }}"
+      }
+    }
+  }
+}
