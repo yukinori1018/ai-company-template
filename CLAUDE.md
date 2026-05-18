@@ -112,6 +112,8 @@ todo → doing → waiting → done
 - **waiting:** 社長確認待ち（§4.1 該当時、または迷った時）。
 - **done:** 完了。社長が確認済み、または自動進行で完了。
 
+詳細運用は [workspace/README.md](workspace/README.md)、起票・状態遷移の手順は [agents/secretary/skills/ticket-management.md](agents/secretary/skills/ticket-management.md)、サブエージェントの作業ルールは [workspace/SUBAGENT_PROTOCOL.md](workspace/SUBAGENT_PROTOCOL.md)。
+
 ### 成果物の保管ルール
 
 - `workspace/output/agent_output/` — 作業中の途中経過。監査用。社長は通常見ない。
@@ -121,7 +123,7 @@ todo → doing → waiting → done
 
 - チケットの状態は Notion カンバンボードと**双方向ではなく、リポジトリ→Notion の片方向で同期**する。
 - 真実は `workspace/tickets/` のファイル状態。Notion はその可視化。
-- 同期は秘書の責務（詳細プロトコルは Phase 5 で `agents/secretary/skills/` に定義）。
+- 同期は秘書の責務。DB スキーマ仕様は [docs/notion-board-schema.md](docs/notion-board-schema.md)、呼び出しプロトコルは [agents/secretary/skills/notion-ticket-sync.md](agents/secretary/skills/notion-ticket-sync.md)。
 
 ---
 
@@ -145,5 +147,6 @@ todo → doing → waiting → done
 
 - 設計の出典: [docs/reference/動画分析.md](docs/reference/動画分析.md)
 - 各エージェントの個別プロファイル: [agents/](agents/)
-- チケット運用詳細: Phase 5 で [workspace/](workspace/) 配下に整備予定
-- Notion 連携セットアップ: Phase 6 で `docs/notion-setup-guide.md` に整備予定
+- チケット運用詳細: [workspace/README.md](workspace/README.md)
+- Notion DB スキーマ仕様: [docs/notion-board-schema.md](docs/notion-board-schema.md)
+- Notion 連携セットアップ手順: Phase 6 で `docs/notion-setup-guide.md` に整備予定
