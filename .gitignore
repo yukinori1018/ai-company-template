@@ -1,0 +1,8 @@
+.DS_Store
+
+# 成果物は Git 管理しない（チケットは管理する）
+workspace/output/**
+!workspace/output/
+!workspace/output/agent_output/
+!workspace/output/final_output/
+!workspace/output/**/.gitkeep
