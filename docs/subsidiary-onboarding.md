@@ -2,6 +2,9 @@
 
 親テンプレート（`ai-company-template`）から **新しい子会社リポジトリを作って稼働開始するまで**の手順です。
 
+> **⚡ 自動スクリプトあり:** Step 1〜6 は `./scripts/create-subsidiary.sh` で自動化できます。詳細は [scripts/README.md](../scripts/README.md)。
+> 本ドキュメントは **手動版／スクリプトで詰まった時のフォールバック** として残しています。
+>
 > **所要時間:** 40分〜1時間（初回）／2回目以降は20〜30分
 > **前提:** Mac（zsh/bash）、Git、Homebrew、Notion アカウント、GitHub アカウント
 
