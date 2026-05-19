@@ -59,7 +59,7 @@
 
 1. **窓口の一元化** — 社長への返答は秘書のみ。他エージェントは秘書経由で報告する。
 2. **チケット駆動** — すべての作業は [workspace/tickets/](workspace/tickets/) でのチケット起票から始まる。チケットなしの作業はしない。
-3. **成果物の二段管理** — 途中経過は `workspace/output/agent_output/`、社長確認用の最終物は `workspace/output/final_output/` に配置。
+3. **成果物の二段管理** — 途中経過は `workspace/output/agent_output/`（リポ内、worktree 単位）、社長確認用の最終物は `~/Documents/AI Company Outputs/{{ 事業名 }}/` に配置（リポ外、全 worktree から共有、Finder で直接アクセス可）。
 4. **メモリへの記録義務** — 失敗・気づき・社長のこだわり・判断理由は、自分の `memory/` に必ず残す。次回以降の品質向上の源泉となる。
 5. **不明点は止まって聞く** — 判断に迷ったら勝手に決めない。チケットを `waiting/` に出して社長に確認する。
 6. **プレースホルダーは保持** — 親テンプレ作業中は `{{ }}` を埋めない。子会社化時に初めて埋める。
@@ -110,7 +110,7 @@
 
 **複数領域にまたがる場合:**
 - 秘書が依頼を分解し、それぞれの担当に並行発注する
-- 各担当の成果物を秘書が統合して `final_output/` に納品
+- 各担当の成果物を秘書が統合して `~/Documents/AI Company Outputs/{{ 事業名 }}/<ticket_id>/` に納品
 
 ---
 
@@ -133,8 +133,10 @@ todo → doing → waiting → done
 
 ### 成果物の保管ルール
 
-- `workspace/output/agent_output/` — 作業中の途中経過。監査用。社長は通常見ない。
-- `workspace/output/final_output/` — **社長が確認する最終納品物のみ**。
+- `workspace/output/agent_output/<ticket_id>/` — 作業中の途中経過。リポ内（worktree 単位、`.gitignore` 対象）。監査用。社長は通常見ない。
+- `~/Documents/AI Company Outputs/{{ 事業名 }}/<ticket_id>/` — **社長が確認する最終納品物のみ**。リポ外。Finder でブックマークしておくと毎回のアクセスが楽。
+
+> 最終納品物をリポ外に置く理由：worktree のサイクル（生成 → 作業 → マージ → 削除）に左右されず、全 worktree／全セッションから同じ場所で参照できるため。Finder で隠しフォルダを辿る必要もない。
 
 ### Notion カンバンとの同期（原則）
 

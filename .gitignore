@@ -3,9 +3,7 @@
 # MCP の実体設定（API キー等の秘匿情報を含むため除外。.mcp.json.example はコミット）
 .mcp.json
 
-# 成果物は Git 管理しない（チケットは管理する）
-workspace/output/**
-!workspace/output/
+# 作業中の途中経過（agent_output）は Git 管理しない（最終納品物はリポ外）
+workspace/output/agent_output/**
 !workspace/output/agent_output/
-!workspace/output/final_output/
-!workspace/output/**/.gitkeep
+!workspace/output/agent_output/.gitkeep
