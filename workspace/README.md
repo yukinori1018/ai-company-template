@@ -12,11 +12,16 @@ workspace/
 │   ├── doing/                   # 作業中
 │   ├── waiting/                 # 社長確認待ち
 │   └── done/                    # 完了
-├── output/                      # 成果物（.gitignore 対象）
-│   ├── agent_output/            # 作業中の途中経過。監査用
-│   └── final_output/            # 社長が確認する最終納品物
+├── output/                      # 作業中の中間ファイルのみ（.gitignore 対象）
+│   └── agent_output/            # 作業中の途中経過。監査用
 ├── README.md                    # このファイル
 └── SUBAGENT_PROTOCOL.md         # サブエージェント共通の受け取り/引き渡し手順
+
+# 最終納品物はリポ外に格納（worktree 間で共有、Finder で直接アクセス可）
+~/Documents/AI Company Outputs/{{ 事業名 }}/
+├── <ticket_id_1>/
+├── <ticket_id_2>/
+└── ...
 ```
 
 ## チケット運用
@@ -28,12 +33,13 @@ workspace/
 
 ## 成果物の管理
 
-| フォルダ | 用途 | 社長が見るか |
-|---------|------|------------|
-| `output/agent_output/<ticket_id>/` | サブエージェントの作業中ファイル | 通常見ない（問題発生時の監査用） |
-| `output/final_output/<ticket_id>/` | 社長確認用の最終納品物 | **常に見る** |
+| パス | 用途 | 社長が見るか |
+|------|------|------------|
+| `workspace/output/agent_output/<ticket_id>/`（リポ内） | サブエージェントの作業中ファイル | 通常見ない（問題発生時の監査用） |
+| `~/Documents/AI Company Outputs/{{ 事業名 }}/<ticket_id>/`（リポ外） | 社長確認用の最終納品物 | **常に見る** |
 
-両フォルダとも `.gitignore` 対象。テンプレ複製時はクリーンな状態でスタートします。
+`workspace/output/agent_output/` は `.gitignore` 対象（テンプレ複製時はクリーン）。
+最終納品物はリポ外なので worktree のサイクルに左右されず、Finder で `~/Documents/AI Company Outputs/{{ 事業名 }}/` をブックマークしておけば一発アクセス可。
 
 ## サブエージェントの作業ルール
 

@@ -66,13 +66,22 @@ grep -rn "{{ " . \
 Gmail・Slack・GitHub などの道具を秘書/サブエージェントに持たせたい場合は、`.mcp.json` にサーバを追加。
 → [docs/mcp-setup-guide.md](docs/mcp-setup-guide.md) 参照。
 
-### Step 5: 初回起動と動作確認
+### Step 5: 最終納品物の格納先を準備
+
+リポ外に最終納品物用フォルダを作っておきます（Finder でブックマーク推奨）：
+
+```bash
+mkdir -p ~/Documents/"AI Company Outputs"/{{ 事業名 }}
+```
+
+### Step 6: 初回起動と動作確認
 
 Claude Code でこのリポジトリを開いて：
 
-1. セッション開始時に `CLAUDE.md` が読み込まれることを確認
+1. セッション開始時に `CLAUDE.md` が読み込まれることを確認（秘書「カズヨ」が起動）
 2. 秘書に「テスト用チケットを1件起票して Notion にも反映して」と依頼
 3. `workspace/tickets/todo/` にファイルが作られ、Notion カードも作られることを確認
+4. 何か納品物のあるタスクを試して、`~/Documents/AI Company Outputs/{{ 事業名 }}/` に最終物が置かれることを確認
 
 ここまで動けば運用開始可能です。
 
@@ -93,7 +102,7 @@ Claude Code でこのリポジトリを開いて：
 
 ### 3. 確認するのは最終納品物だけ
 
-[workspace/output/final_output/](workspace/output/final_output/) に置かれたものを見ます。途中経過（`agent_output/`）は問題発生時の監査用。
+**`~/Documents/AI Company Outputs/{{ 事業名 }}/`** に置かれたものを見ます。Finder でこのフォルダをブックマークしておくのがおすすめ。途中経過（リポ内の `workspace/output/agent_output/`）は問題発生時の監査用。
 
 ### 4. 承認が必要な依頼は `waiting/` に来る
 
@@ -120,7 +129,8 @@ Claude Code でこのリポジトリを開いて：
 │   └── content_creator/   (ヒデアキ)  # コンテンツ制作
 ├── workspace/
 │   ├── tickets/{todo,doing,waiting,done}/   # カンバン（Notion同期）
-│   ├── output/{agent_output,final_output}/  # 成果物
+│   └── output/agent_output/                 # 作業中の途中経過のみ（gitignore）
+                                              # 最終納品物は ~/Documents/AI Company Outputs/{{ 事業名 }}/
 │   ├── README.md                            # workspace 運用ハブ
 │   └── SUBAGENT_PROTOCOL.md                 # サブ共通プロトコル
 └── docs/
