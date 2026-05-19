@@ -61,9 +61,9 @@
 5. 新規ビューで「Board」を選択 → グループ化を `Status` に設定
 6. Notion インテグレーション（Internal Integration Token）を発行し、このデータベースに「接続」
 7. Database URL から Database ID を抽出（URL の `https://www.notion.so/<workspace>/<DATABASE_ID>?v=...` の `<DATABASE_ID>` 部分）
-8. ルートの `.mcp.json.example` を `.mcp.json` にコピーし、`NOTION_API_KEY` と `NOTION_DATABASE_ID` を埋める
+8. ルートの `.mcp.json.example` を `.mcp.json` にコピーし、`OPENAPI_MCP_HEADERS` 内の Bearer トークンと `NOTION_DATABASE_ID` を埋める（公式 MCP サーバは JSON 文字列形式のヘッダー指定を要求します）
 
-詳細な手順は Phase 6 で `docs/notion-setup-guide.md` に整備予定。
+詳細な手順は [docs/notion-setup-guide.md](notion-setup-guide.md) を参照。
 
 ## 5. 同期の真実
 

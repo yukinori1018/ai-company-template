@@ -55,7 +55,7 @@
       "command": "npx",
       "args": ["-y", "@notionhq/notion-mcp-server"],
       "env": {
-        "NOTION_API_KEY": "secret_...",
+        "OPENAPI_MCP_HEADERS": "{\"Authorization\": \"Bearer ntn_...\", \"Notion-Version\": \"2022-06-28\"}",
         "NOTION_DATABASE_ID": "..."
       }
     },
@@ -77,6 +77,8 @@
   }
 }
 ```
+
+> 各 MCP サーバの env 名は実装依存です。Notion は `OPENAPI_MCP_HEADERS`（JSON 文字列）を要求。他サーバの正確な env 名は各 README を参照してください。
 
 > `command` と `args` は各 MCP サーバの README に従って正確に書く。env キー名も同様。
 
