@@ -79,7 +79,7 @@ cp .mcp.json.example .mcp.json
       "command": "npx",
       "args": ["-y", "@notionhq/notion-mcp-server"],
       "env": {
-        "NOTION_API_KEY": "secret_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "OPENAPI_MCP_HEADERS": "{\"Authorization\": \"Bearer ntn_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\", \"Notion-Version\": \"2022-06-28\"}",
         "NOTION_DATABASE_ID": "abc123def4567890abc123def4567890"
       }
     }
@@ -87,7 +87,13 @@ cp .mcp.json.example .mcp.json
 }
 ```
 
+**重要な書き換え方:**
+- `OPENAPI_MCP_HEADERS` の値は **JSON 文字列**（クォートエスケープ済み）。`Bearer` の後ろのトークン部分だけを Step 3 でコピーした値に置き換える
+- ダブルクオートのエスケープ（`\"`）を消さないこと（消すと JSON パースが壊れる）
+- `NOTION_DATABASE_ID` は Step 6 で取得した 32 文字の ID をそのまま
+
 > `.mcp.json` は `.gitignore` 対象です。誤ってコミットしないでください。
+> Notion 公式 MCP サーバ（`@notionhq/notion-mcp-server`）は `OPENAPI_MCP_HEADERS` 形式を要求します。`NOTION_API_KEY` 単体では認証されません。
 
 ### 動作確認
 
