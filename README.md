@@ -33,20 +33,25 @@ cd <new-repo>
 
 ### Step 2: プレースホルダーを埋める
 
-[CLAUDE.md §7](CLAUDE.md) のチェックリストを上から順に埋めます。
+[CLAUDE.md §7](CLAUDE.md) のチェックリスト（§7.1）を上から順に埋めます。
 
 ```bash
-# 埋め残しを検出
-grep -rn "{{ " . --include="*.md" --exclude-dir=docs/reference
+# 埋め残しを検出（README/CLAUDE/各種docs/.mcp.json.example を全部スキャン）
+grep -rn "{{ " . \
+  --include="*.md" --include="*.json*" \
+  --exclude-dir=docs/reference --exclude-dir=.git
 ```
 
-最低限埋めるもの：
+セットアップ時に埋めるもの（CLAUDE.md §7.1）：
 
 - `{{ 事業名 }}` — 例：Amazon物販事業
 - `{{ ミッション }}` — その事業の存在意義
 - `{{ 最重要KPI }}` — 例：月商800万円
 - `{{ 主力商品/サービス }}` — 何を扱うか
 - `{{ 想定顧客 }}` — 誰のため
+- `{{ NOTION_API_KEY }}` / `{{ NOTION_DATABASE_ID }}` — Step 3 で取得
+
+> grep の結果に `{{ チケットタイトル }}` も出ますが、これは **runtime プレースホルダー**（チケット起票のたびに埋める）なのでセットアップ時の対応は不要です。詳細は CLAUDE.md §7.2。
 
 エージェント名（カズヨ・ハジメ・ハルオ・マリエ・ヒデアキ）を事業に合わせて変えたい場合は、各 `agents/<role>/agent.md` を編集。
 
