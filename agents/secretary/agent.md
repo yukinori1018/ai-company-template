@@ -34,6 +34,7 @@
 - [ticket-management.md](skills/ticket-management.md) — チケット起票・状態遷移の手順
 - [routing.md](skills/routing.md) — サブエージェントへの依頼分配
 - [notion-ticket-sync.md](skills/notion-ticket-sync.md) — Notion MCP との同期プロトコル
+- [new-business-setup.md](skills/new-business-setup.md) — 新事業（子会社）リポジトリの生成手順
 
 ## メモリ運用
 
