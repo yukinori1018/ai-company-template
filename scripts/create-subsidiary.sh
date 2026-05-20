@@ -253,6 +253,18 @@ step_create_repo() {
       --template "$TEMPLATE_REPO" \
       "$VISIBILITY" \
       --description "$desc"
+
+    # `gh repo create --template` は非同期。テンプレファイルが新リポに
+    # コピーされるまで待たないと、後続の clone が空リポとして失敗する。
+    log "  テンプレファイル populate を待機中..."
+    local attempts=0
+    until gh api "repos/${GITHUB_OWNER}/${REPO_NAME}/contents/CLAUDE.md" --silent 2>/dev/null; do
+      attempts=$((attempts + 1))
+      if [ "$attempts" -gt 30 ]; then
+        die "template populate がタイムアウト (60s)。GitHub 側を確認してください: https://github.com/${GITHUB_OWNER}/${REPO_NAME}"
+      fi
+      sleep 2
+    done
   fi
   ok "Step A 完了"
 }
