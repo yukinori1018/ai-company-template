@@ -106,6 +106,23 @@ yes y | scripts/create-subsidiary.sh \
 - 失敗時は Step を特定し、原因（401 unauthorized なら Integration の Connect 漏れ、など）を切り分けて報告
 - 成功時は生成された `~/Claude Code/<repo>/` の主要ファイル（`CLAUDE.md`、`.mcp.json` の形式、`workspace/` 構造）を確認して報告
 
+## スクリプト完了後の必須ステップ：Notion カンバンビュー作成
+
+Notion 公式 REST API はビュー作成を公開していないため、bash スクリプトでは作れません。
+代わりに Notion MCP（`notion-create-view`）でカンバンビューを追加します。
+
+スクリプト出力の `database_id=...` を控え、以下の手順で実行：
+
+1. `notion-fetch` でその DB を取得し、`<data-source url="collection://...">` の UUID を抽出
+2. `notion-create-view` を以下の引数で呼ぶ：
+   - `database_id`: スクリプトから得た database_id
+   - `data_source_id`: 上記 1. の UUID
+   - `name`: `"Kanban"`
+   - `type`: `"board"`
+   - `configure`: `GROUP BY "Status"\nSHOW "Name", "Assignee", "Priority", "RequiresApproval", "TicketID"`
+
+成功したら社長に「カンバンビューも作成しました」と報告してください。
+
 ## 完了後の次アクション提案
 
 成功したら社長に：
