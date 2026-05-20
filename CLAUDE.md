@@ -176,6 +176,7 @@ todo → doing → waiting → done
 
 ## 8. 参照
 
+- **🔧 社長の手動運用メモ（プレイブック）**: [docs/owner-playbook.md](docs/owner-playbook.md) — 迷ったらまずここ
 - 設計の出典: [docs/reference/動画分析.md](docs/reference/動画分析.md)
 - 各エージェントの個別プロファイル: [agents/](agents/)
 - チケット運用詳細: [workspace/README.md](workspace/README.md)
