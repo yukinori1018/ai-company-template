@@ -24,8 +24,19 @@ set -euo pipefail
 # ---------------------------------------------------------------------------
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_ROOT="$( cd "${SCRIPT_DIR}/.." && pwd )"
-CONFIG_FILE="${HOME}/.config/ai-company-template/config.env"
-TEMPLATE_REPO="Yukinori1018/ai-company-template"
+
+# このテンプレートの識別情報を git remote から実行時判定（別名クローンでも動くため）
+_origin_url="$(cd "$REPO_ROOT" && git remote get-url origin 2>/dev/null || true)"
+if [ -n "$_origin_url" ]; then
+  # owner/repo を抽出（git@github.com:OWNER/REPO.git, https://github.com/OWNER/REPO[.git] 両対応）
+  TEMPLATE_REPO="$(echo "$_origin_url" | sed -E 's#\.git$##' | awk -F'[:/]' 'NF>=2 {print $(NF-1)"/"$NF}')"
+else
+  TEMPLATE_REPO="$(whoami)/$(basename "$REPO_ROOT")"
+fi
+TEMPLATE_REPO_NAME="$(basename "$TEMPLATE_REPO")"
+unset _origin_url
+
+CONFIG_FILE="${HOME}/.config/${TEMPLATE_REPO_NAME}/config.env"
 CLONE_PARENT="${HOME}/Claude Code"
 OUTPUT_PARENT="${HOME}/Documents/AI Company Outputs"
 NOTION_VERSION="2022-06-28"
@@ -60,10 +71,10 @@ run() {
 }
 
 usage() {
-  cat <<'EOF'
+  cat <<EOF
 Usage: create-subsidiary.sh [OPTIONS]
 
-ai-company-template から子会社リポジトリを生成し、Notion DB / .mcp.json /
+${TEMPLATE_REPO_NAME} から子会社リポジトリを生成し、Notion DB / .mcp.json /
 最終納品物フォルダまで一括セットアップします。
 
 OPTIONS:
@@ -83,7 +94,7 @@ OPTIONS:
 事前準備:
   1. gh, jq, curl, git をインストール
   2. gh auth login で GitHub 認証
-  3. ~/.config/ai-company-template/config.env を作成
+  3. ~/.config/${TEMPLATE_REPO_NAME}/config.env を作成
      （雛形: scripts/config.env.example）
 
 例:
@@ -175,10 +186,10 @@ load_config() {
 [ERR] 設定ファイルがありません: $CONFIG_FILE
 
 初期化手順:
-  mkdir -p ~/.config/ai-company-template
-  cp scripts/config.env.example ~/.config/ai-company-template/config.env
-  chmod 600 ~/.config/ai-company-template/config.env
-  \$EDITOR ~/.config/ai-company-template/config.env
+  mkdir -p ~/.config/${TEMPLATE_REPO_NAME}
+  cp scripts/config.env.example ~/.config/${TEMPLATE_REPO_NAME}/config.env
+  chmod 600 ~/.config/${TEMPLATE_REPO_NAME}/config.env
+  \$EDITOR ~/.config/${TEMPLATE_REPO_NAME}/config.env
 
 詳細: scripts/README.md
 EOF
@@ -230,7 +241,7 @@ EOF
 step_create_repo() {
   log "Step A: GitHub リポジトリ作成"
   local desc
-  desc="${BUSINESS_NAME} — ai-company-template から生成"
+  desc="${BUSINESS_NAME} — ${TEMPLATE_REPO_NAME} から生成"
   if [ "$DRY_RUN" -eq 1 ]; then
     printf '\033[1;35m[DRY]\033[0m gh repo create %s/%s --template %s %s --description "%s"\n' \
       "$GITHUB_OWNER" "$REPO_NAME" "$TEMPLATE_REPO" "$VISIBILITY" "$desc"
@@ -438,7 +449,7 @@ step_commit_and_push() {
     else
       git commit -m "chore: initialize subsidiary (${BUSINESS_NAME})
 
-ai-company-template から create-subsidiary.sh で生成:
+${TEMPLATE_REPO_NAME} から create-subsidiary.sh で生成:
 - プレースホルダーを実値で置換
 - Notion カンバン DB を作成し .mcp.json に紐付け（.mcp.json は gitignore）
 - 最終納品物フォルダ ~/Documents/AI Company Outputs/${BUSINESS_NAME}/ を作成"
