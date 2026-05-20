@@ -36,7 +36,10 @@ fi
 TEMPLATE_REPO_NAME="$(basename "$TEMPLATE_REPO")"
 unset _origin_url
 
-CONFIG_FILE="${HOME}/.config/${TEMPLATE_REPO_NAME}/config.env"
+# 共有設定パス。テンプレ／子会社のどのリポから実行しても同じ場所を参照する。
+# （リポ名から動的生成すると、子会社リポから create-subsidiary.sh を再実行した時に
+#  再設定を求められてしまう。共有を維持するため固定値にしている。）
+CONFIG_FILE="${HOME}/.config/ai-company-template/config.env"
 CLONE_PARENT="${HOME}/Claude Code"
 OUTPUT_PARENT="${HOME}/Documents/AI Company Outputs"
 NOTION_VERSION="2022-06-28"
@@ -94,7 +97,7 @@ OPTIONS:
 事前準備:
   1. gh, jq, curl, git をインストール
   2. gh auth login で GitHub 認証
-  3. ~/.config/${TEMPLATE_REPO_NAME}/config.env を作成
+  3. ~/.config/ai-company-template/config.env を作成
      （雛形: scripts/config.env.example）
 
 例:
@@ -186,10 +189,10 @@ load_config() {
 [ERR] 設定ファイルがありません: $CONFIG_FILE
 
 初期化手順:
-  mkdir -p ~/.config/${TEMPLATE_REPO_NAME}
-  cp scripts/config.env.example ~/.config/${TEMPLATE_REPO_NAME}/config.env
-  chmod 600 ~/.config/${TEMPLATE_REPO_NAME}/config.env
-  \$EDITOR ~/.config/${TEMPLATE_REPO_NAME}/config.env
+  mkdir -p ~/.config/ai-company-template
+  cp scripts/config.env.example ~/.config/ai-company-template/config.env
+  chmod 600 ~/.config/ai-company-template/config.env
+  \$EDITOR ~/.config/ai-company-template/config.env
 
 詳細: scripts/README.md
 EOF
